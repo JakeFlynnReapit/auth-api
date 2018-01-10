@@ -116,7 +116,7 @@ class HoursCounter extends Component {
     }, 0);
     return (
       <div style={{...defaultStyle, width: '40%', display: 'inline-block'}}>
-        <h2>{Math.round(totalDuration * 2.7778E-7) > 1 ? Math.round(totalDuration * 2.7778E-7) + ' hours' 
+        <h2>{Math.round(totalDuration * 2.7778E-7) > 1 ? Math.round(totalDuration * 2.7778E-7) + ' hours'
           : Math.round(totalDuration * 2.7778E-7) + ' hour'}</h2>
       </div>
     );
@@ -127,23 +127,24 @@ class Filter extends Component {
   render() {
     return (
       <div style={defaultStyle}>
-        <img/>
-        <input type="text"/>
+        <img alt=""/>
+        <input type="text" onKeyUp={event =>
+            this.props.onTextChange(event.target.value)}/>
         Filter
       </div>
     );
   }
 }
 
-class Playlist extends Component { 
+class Playlist extends Component {
   render() {
-    return ( 
+    return (
       <div style={{...defaultStyle, width: "25%", display: "inline-block"}}>
-        <img/>
+        <img alt=""/>
         <h3>{this.props.playlist.name}</h3>
         <ul>
-          {this.props.playlist.songs.map(song =>
-            <li>{song.name} ({Math.round(song.duration / 1000)})</li>
+          {this.props.playlist.songs.map((song, index) =>
+            <li key={index}>{song.name} ({Math.round(song.duration / 1000)})</li>
           )}
         </ul>
       </div>
@@ -154,7 +155,10 @@ class Playlist extends Component {
 class App extends Component {
   constructor() {
     super();
-    this.state = {serverData: {}}
+    this.state = {
+      serverData: {},
+      filterString: ''
+    }
   }
   componentDidMount() {
     var that = this;
@@ -168,14 +172,18 @@ class App extends Component {
       <div className="App">
         {this.state.serverData.user ?
         <div>
-          <h1 style={{...defaultStyle, 'font-size': '54px',}}> 
-            {this.state.serverData.user.name}'s Playlists
+          <h1 style={{...defaultStyle, fontSize: '54px',}}>
+            {this.state.serverData.user.name}s Playlists
           </h1>
           <PlaylistCounter playlists={this.state.serverData.user.playlists}/>
           <HoursCounter playlists={this.state.serverData.user.playlists}/>
-          <Filter/>
-          {this.state.serverData.user.playlists.map(playlist =>
-            <Playlist playlist={playlist}/>
+          <Filter onTextChange={text => this.setState({filterString: text})}/>
+          {this.state.serverData.user.playlists.filter(playlist =>
+            playlist.name.toLowerCase().includes(
+              this.state.filterString.toLowerCase()
+            )
+          ).map((playlist, index) =>
+            <Playlist playlist={playlist} key={index}/>
           )}
         </div> : <h1 style={{...defaultStyle}}>Loading...</h1>
         }
