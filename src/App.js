@@ -176,7 +176,7 @@ class App extends Component {
       <div className="App">
         {this.state.serverData.user ?
         <div>
-          <h1 style={{...defaultStyle, fontSize: '54px',}}>
+          <h1 style={{...defaultStyle, fontSize: '55px',}}>
             {this.state.serverData.user.name}s Playlists
           </h1>
           <PlaylistCounter playlists={playlistsToRender}/>
