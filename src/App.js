@@ -157,7 +157,14 @@ class App extends Component {
             <Playlist playlist={playlist} key={index}/>
           )}
         </div> : <button
-                  onClick={() => window.location = 'http://localhost:8888/login'}
+                  onClick={() => {
+                    if(window.location.href.includes('localhost')){
+                      window.location = 'http://localhost:8888/login'
+                    } else{
+                      window.location = 'https://authentication-api.herokuapp.com/login'
+                    }
+                  }
+                  }
                   style={{padding: '20px',fontSize: '50px',marginTop: '20px'}}
                   >Sign In</button>
         }
