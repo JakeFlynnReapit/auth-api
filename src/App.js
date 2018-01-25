@@ -161,7 +161,7 @@ class App extends Component {
                     if(window.location.href.includes('localhost')){
                       window.location = 'http://localhost:8888/login'
                     } else{
-                      window.location = 'https://authentication-api.herokuapp.com/login'
+                      window.location = 'https://authentication-api-backend.herokuapp.com/login'
                     }
                   }
                   }
