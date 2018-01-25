@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import queryString from 'query-string';
 import './App.css';
 
 let defaultStyle = {
@@ -29,69 +30,6 @@ let dummyData = {
           }
         ]
       },
-      {
-        name: 'House',
-        songs: [
-          {
-            name: 'Darkness',
-            duration: 182000
-          },
-          {
-            name: 'Say To Me',
-            duration: 256000
-          },
-          {
-            name: 'Gecko (Overdrive)',
-            duration: 166000
-          },
-          {
-            name: 'Last All Night (Koala)',
-            duration: 245000
-          }
-        ]
-      },
-      {
-        name: 'Metal',
-        songs: [
-          {
-            name: 'Before I Forget',
-            duration: 243000
-          },
-          {
-            name: 'Naysayer',
-            duration: 210000
-          },
-          {
-            name: 'Gravity',
-            duration: 201000
-          },
-          {
-            name: 'Downfall',
-            duration: 245000
-          }
-        ]
-      },
-      {
-        name: 'Lit',
-        songs: [
-          {
-            name: 'Gucci Gang',
-            duration: 131000
-          },
-          {
-            name: 'Look At Me',
-            duration: 152000
-          },
-          {
-            name: 'Little Boy',
-            duration: 251000
-          },
-          {
-            name: 'The Plan',
-            duration: 260000
-          }
-        ]
-      }
     ]
   }
 };
@@ -137,12 +75,14 @@ class Filter extends Component {
 
 class Playlist extends Component {
   render() {
+    let playlist = this.props.playlist
     return (
       <div style={{...defaultStyle, width: "25%", display: "inline-block"}}>
         <img alt=""/>
-        <h3>{this.props.playlist.name}</h3>
+        <img src={playlist.imageUrl} alt="" style={{width: '160px'}}/>
+        <h3>{playlist.name}</h3>
         <ul>
-          {this.props.playlist.songs.map((song, index) =>
+          {playlist.songs.map((song, index) =>
             <li key={index}>{song.name} ({Math.round(song.duration / 1000)})</li>
           )}
         </ul>
@@ -160,24 +100,51 @@ class App extends Component {
     }
   }
   componentDidMount() {
-    var that = this;
-    setTimeout(function() {
-      that.setState({serverData: dummyData});
-    }, 1000);
+    let parsedTokens = queryString.parse(window.location.search)
+    let accessToken = parsedTokens.access_token
+
+    fetch('https://api.spotify.com/v1/me/', {
+      headers: {
+        'Authorization': 'Bearer ' + accessToken
+      }
+    }).then((response) => response.json())
+    .then(data => this.setState({
+      user: {
+        name: data.display_name
+      }
+    }))
+
+    fetch('https://api.spotify.com/v1/me/playlists', {
+      headers: {
+        'Authorization': 'Bearer ' + accessToken
+      }
+    }).then((response) => response.json())
+    .then(data => this.setState({
+      playlists: data.items.map(item => {
+        console.log(data.items)
+        return {
+          name: item.name,
+          imageUrl: item.images[0].url,
+          songs: [],
+        }
+      })
+    }))
   }
   render() {
-    let playlistsToRender = this.state.serverData.user ? this.state.serverData.user.playlists
-      .filter(playlist =>
+    let playlistsToRender =
+    this.state.user &&
+    this.state.playlists
+      ? this.state.playlists.filter(playlist =>
         playlist.name.toLowerCase().includes(
           this.state.filterString.toLowerCase()
-        )
-      ) : []
+        ))
+      : []
     return (
       <div className="App">
-        {this.state.serverData.user ?
+        {this.state.user ?
         <div>
           <h1 style={{...defaultStyle, fontSize: '55px',}}>
-            {this.state.serverData.user.name}s Playlists
+            {this.state.user.name}s Playlists
           </h1>
           <PlaylistCounter playlists={playlistsToRender}/>
           <HoursCounter playlists={playlistsToRender}/>
@@ -185,7 +152,10 @@ class App extends Component {
           {playlistsToRender.map((playlist, index) =>
             <Playlist playlist={playlist} key={index}/>
           )}
-        </div> : <h1 style={{...defaultStyle}}>Loading...</h1>
+        </div> : <button
+                  onClick={() => window.location = 'http://localhost:8888/login'}
+                  style={{padding: '20px',fontSize: '50px',marginTop: '20px'}}
+                  >Sign In</button>
         }
       </div>
     );
