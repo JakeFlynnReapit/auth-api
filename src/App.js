@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import queryString from 'query-string'
-import './css/main.css'
 import PlaylistCounter from './components/PlaylistCounter'
 import MinutesCounter from './components/MinutesCounter'
 import Filter from './components/Filter'
