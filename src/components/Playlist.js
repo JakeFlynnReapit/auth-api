@@ -4,19 +4,19 @@ class Playlist extends Component {
   render() {
     let playlist = this.props.playlist
     return (
-			<div className="playlist">
-      	<img src={playlist.imageUrl} alt="" />
-      	<ul>
-					<li className="title">{playlist.name}</li>
-        	{
-          	playlist.songs.map((song, index) =>
-						<li key={index}>{song.name}: {
-								Math.round(song.duration / 1000).toString().slice(0)[0] + "m"
-							}
-						</li>)
-        	}
-      	</ul>
-    	</div>
+			<a className="playlist" href={playlist.url} target="_blank" rel="noopener noreferrer">
+				<div>
+	      	<img src={playlist.imageUrl} alt="Playlist" />
+					<h5>{playlist.name}</h5>
+	      	<ul>
+	        	{
+	        	playlist.songs.map((song, index) =>
+							<li key={index}>{song.name}</li>
+						)
+	        	}
+	      	</ul>
+	    	</div>
+			</a>
 		)
   }
 }

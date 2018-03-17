@@ -27,9 +27,12 @@ class App extends Component {
       headers: {
         'Authorization': 'Bearer ' + accessToken
       }
-    }).then((response) => response.json()).then(data => this.setState({
+    }).then((response) => response.json())
+		.then(data => this.setState({
       user: {
-        name: data.display_name
+        name: data.display_name,
+				img: data.images[0].url,
+				spotify_url: data.external_urls.spotify
       }
     }))
 
@@ -51,8 +54,7 @@ class App extends Component {
 				.then(response => response.json())
 				return trackDataPromise
 			})
-			let allTrackDataPromises =
-				Promise.all(trackDataPromises)
+			let allTrackDataPromises = Promise.all(trackDataPromises)
 			let playlistPromise = allTrackDataPromises
 			.then(trackData => {
 				trackData.forEach((trackData, i) => {
@@ -60,7 +62,7 @@ class App extends Component {
 						.map(item => item.track)
 						.map(trackData => ({
 							name: trackData.name,
-							duration: trackData.duration_ms
+							duration: trackData.duration_ms,
 						}))
 				})
 				return playlists
@@ -72,7 +74,8 @@ class App extends Component {
         return {
 					name: item.name,
 					imageUrl: item.images[0].url,
-					songs: item.trackData.slice(0,5)
+					songs: item.trackData.slice(0,5),
+					url: item.external_urls.spotify
 				}
       })
     }))
@@ -93,12 +96,15 @@ class App extends Component {
       {
         this.state.user
           ? <div className="user-wrapper">
+							<a href={this.state.user.spotify_url} target="_blank" rel="noopener noreferrer">
+								<img className="user-img" src={this.state.user.img} alt="User" />
+							</a>
               <h1>
                 Hey, {this.state.user.name}!
               </h1>
+							<Filter onTextChange={text => this.setState({filterString: text})}/>
               <PlaylistCounter playlists={playlistsToRender}/>
               <MinutesCounter playlists={playlistsToRender}/>
-              <Filter onTextChange={text => this.setState({filterString: text})}/>
 							<div className="playlists-wrapper">
 								{
 									playlistsToRender.map((playlist, index) => <Playlist playlist={playlist} key={index}/>)

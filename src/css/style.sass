@@ -1,7 +1,7 @@
 @import 'colourPalette.sass'
 
 body
-	font-family: 'Open Sans', sans-serif
+	font-family: 'Karla', sans-serif
 	-webkit-font-smoothing: antialiased
 
 @-webkit-keyframes Gradient
@@ -66,25 +66,29 @@ body
 		border: 1px solid $emerald
 
 .app
-	background-image: -webkit-linear-gradient(10deg, $white 49.9%, $orange 50%)
-  background-image: -o-linear-gradient(10deg, $white 49.9%, $orange 50%)
-	background-image: linear-gradient(10deg, $white 49.9%, $orange 50%)
+	// background-image: -webkit-linear-gradient(10deg, $white 49.9%, $orange 50%)
+  // background-image: -o-linear-gradient(10deg, $white 49.9%, $orange 50%)
+	// background-image: linear-gradient(10deg, $white 49.9%, $orange 50%)
+	color: $dark
 
 .user-wrapper
 	max-width: 970px
-	padding: 0 20px
+	padding: 20px
 	margin: 0 auto
+	.user-img
+		display: block
+		margin: 0 auto
+		border-radius: 50%
 	h1
 		font-weight: 400
-		color: $white
 		padding: 50px 0
 		margin: 0
 		font-size: 36px
 		text-align: center
 	.playlist-counter, .minute-counter
 		display: inline-block
-		color: $white
 		width: 50%
+		margin: 10px 0
 		text-align: center
 		h2
 			font-weight: 300
@@ -94,47 +98,49 @@ body
 	.filter
 		text-align: center
 		input
-			width: 200px
+			width: 100%
+			outline: none
+			font-size: 30px
+			border: 0
 			padding: 5px 10px
 			margin: 10px 0
+			background: transparent
 	.playlists-wrapper
 		display: flex
 		justify-content: space-around
 		flex-wrap: wrap
 		padding: 20px 0
 		.playlist
+			h5
+				font-size: 20px
+				margin: 10px 0
+			text-decoration: none
+			color: $dark
+			background: $white
+			border: 1px solid darken($white, 5%)
+			border-radius: 5px
 			display: inline-block
 			position: relative
-			width: 30%
+			width: calc(25% - 62px)
+			padding: 20px
 			margin: 10px
 			overflow: hidden
-			&:hover > ul
-				opacity: 1
-				transform: translateY(0)
 			ul
 				padding: 0
-				text-align: left
-				transform: translateY(300px)
-				overflow: hidden
-				transition: all .4s ease-in-out
-				background: $emerald
-				color: $white
-				position: absolute
-				padding: 20px
-				opacity: 0
-				top: 0
-				left: 0
-				right: 0
-				bottom: 0
 				margin: 0
 				li
-					list-style-type: none
-					font-weight: 400
-					padding: 5px 0
-					font-size: 16px
-					&.title
-						text-align: center
-						font-weight: 700
-						font-size: 20px
+					list-style: none
+					margin: 5px 0
 			img
 				width: 100%
+@media only screen and (max-width: 990px)
+	.user-wrapper .playlists-wrapper .playlist
+		width: calc(33% - 62px)
+
+@media only screen and (max-width: 800px)
+	.user-wrapper .playlists-wrapper .playlist
+		width: calc(50% - 62px)
+
+@media only screen and (max-width: 500px)
+	.user-wrapper .playlists-wrapper .playlist
+		width: 100%
