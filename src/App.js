@@ -5,15 +5,24 @@ import MinutesCounter from './components/MinutesCounter'
 import Filter from './components/Filter'
 import Playlist from './components/Playlist'
 import Landing from './pages/Landing'
+import Navbar from './components/Navbar'
 
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props)
+		this.displayFilter = this.displayFilter.bind(this)
     this.state = {
       serverData: {},
-      filterString: ''
+      filterString: '',
+			displayFilter: ''
     }
   }
+
+	displayFilter() {
+		this.state.displayFilter === 'displayFilter'
+		? this.setState({displayFilter: ''})
+		: this.setState({displayFilter: 'displayFilter'})
+	}
 
   componentDidMount() {
     let parsedTokens = queryString.parse(window.location.search)
@@ -91,28 +100,26 @@ class App extends Component {
 				return matchesPlaylist || matchesSong
 			})
       : []
+		let user = this.state.user && this.state.user
     return (
-      <div className="app">
-      {
+			<div className={this.state.displayFilter + " app"}>
+			{
         this.state.user
           ? <div className="user-wrapper">
-							<a href={this.state.user.spotify_url} target="_blank" rel="noopener noreferrer">
-								<img className="user-img" src={this.state.user.img} alt="User" />
-							</a>
-              <h1>
-                Hey, {this.state.user.name}!
-              </h1>
-							<Filter onTextChange={text => this.setState({filterString: text})}/>
+							<Navbar user={user} action={this.displayFilter}/>
+							{ this.state.displayFilter &&
+								<Filter action={this.displayFilter} onTextChange={text => this.setState({filterString: text})}/>
+							}
               <PlaylistCounter playlists={playlistsToRender}/>
-              <MinutesCounter playlists={playlistsToRender}/>
 							<div className="playlists-wrapper">
 								{
 									playlistsToRender.map((playlist, index) => <Playlist playlist={playlist} key={index}/>)
 								}
 							</div>
+							<MinutesCounter playlists={playlistsToRender}/>
             </div>
           : <Landing />
-        }
+      }
       </div>
     )
   }
