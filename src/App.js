@@ -37,17 +37,19 @@ class App extends Component {
         'Authorization': 'Bearer ' + accessToken
       }
     }).then((response) => response.json()).then((data) => {
-      data.images[0] && this.setState({
-        user: {
-          img: data.images[0].url
-        }
-      })
       this.setState({
         user: {
           name: data.display_name,
           spotify_url: data.external_urls.spotify
         }
       })
+			data.images &&
+				this.setState(prevState => ({
+					user: {
+						...prevState.user,
+						img: data.images[0].url
+					}
+				}))
     })
 
     fetch('https://api.spotify.com/v1/me/playlists', {

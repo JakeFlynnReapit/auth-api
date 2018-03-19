@@ -10,7 +10,7 @@ class MinutesCounter extends Component {
       }, 0)
     return (<div className="minute-counter">
       <h2>or around
-        <span>{Math.round(totalDuration / 1000 / 60)}</span>
+        <span> {Math.round(totalDuration / 1000 / 60)} </span>
         minutes</h2>
     </div>)
   }
