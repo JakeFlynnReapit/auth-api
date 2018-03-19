@@ -55,6 +55,7 @@ body
 	color: $white
 	width: 200px
 	margin: 20px auto
+	position: relative
 	font-weight: 700
 	padding: 10px
 	font-size: 16px
@@ -188,3 +189,29 @@ body
 @media only screen and (max-width: 500px)
 	.user-wrapper .playlists-wrapper .playlist
 		width: 100%
+
+@keyframes spinner
+	to
+		transform: rotate(360deg)
+
+.sending:before
+	content: ''
+	box-sizing: border-box
+	position: absolute
+	top: 31%
+	left: 50%
+	width: 20px
+	height: 20px
+	margin-top: -3px
+	margin-left: -10px
+	border-radius: 50%
+	border-top: 2px solid white
+	border-right: 2px solid transparent
+	animation: spinner .6s linear infinite
+
+.sending
+	background: $green !important
+	border: 0
+	color: $green !important
+	pointer-events: none
+	user-select: none
