@@ -8,7 +8,7 @@ class Navbar extends Component {
 					<i className="fas fa-search"></i>
 				</div>
 				<a href={this.props.user.spotify_url} target="_blank" rel="noopener noreferrer">
-					<img className="user-img" src={this.props.user.img} alt="User" />
+					{this.props.user.img && <img className="user-img" src={this.props.user.img} alt="User" />}
 					<span>{this.props.user.name}</span>
 				</a>
 			</div>
